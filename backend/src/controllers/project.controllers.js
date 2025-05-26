@@ -3,8 +3,23 @@ import { ProjectMember } from "../models/projectmember.models.js";
 import { AvailableUserRoles, UserRolesEnum } from "../utils/constants.js";
 import { ApiResponse } from "../utils/api-response.js";
 import { ApiError } from "../utils/api-error.js";
+
 const getProjects = async (req, res) => {
-  const { name, description, createdBy } = req.body;
+  try {
+    const project = await Project.find();
+
+    res.status(200).json({
+      success: true,
+      count: project.length,
+      data: project,
+    });
+  } catch (error) {
+    console.error('Error fetching products:', error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while fetching products',
+    });
+  }
 };
 
 const getProjectById = async (req, res) => {
@@ -106,7 +121,31 @@ const deleteProject = async (req, res) => {
 };
 
 const getProjectMembers = async (req, res) => {
-  // get project members
+  try {
+    const { id } = req.params;
+    const project = await Project.findById(id);
+
+    if (!project) {
+      return res.status(404).json(new ApiResponse(404, { message: 'Project not found' }));
+    }
+
+    const projectMembers = await ProjectMember.find({ project: id });
+
+
+    res.status(200).json({
+      success: true,
+
+      data: projectMembers,
+    });
+
+
+  }
+  catch (error) {
+    console.error('Error fetching projects:', error);
+    return res.status(500).json(new ApiResponse(500, {
+      message: 'Internal server error',
+    }));
+  }
 };
 
 const addMemberToProject = async (req, res) => {
@@ -114,7 +153,7 @@ const addMemberToProject = async (req, res) => {
     const { projectId } = req.params;
     const { userId, role } = req.body;
 
- 
+
 
     if (!projectId || !userId) {
       return res.status(400).json({ message: "Project ID and User ID are required." });
@@ -137,11 +176,57 @@ const addMemberToProject = async (req, res) => {
 
 
 const deleteMember = async (req, res) => {
-  // delete member from project
+  try {
+    const { id } = req.params;
+
+
+    const member = await ProjectMember.findById(id);
+    if (!member) {
+      return res.status(404).json(new ApiResponse(404, { message: 'member not found' }));
+    }
+
+    await ProjectMember.findByIdAndDelete(id);
+    return res.status(200).json(new ApiResponse(200, { message: 'Member is deleted' }));
+
+  }
+
+  catch (error) {
+    console.error("Error adding member:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+
 };
 
 const updateMemberRole = async (req, res) => {
-  // update member role
+
+
+  try {
+    const { id } = req.params;
+
+    const { role } = req.body;
+    const member = await ProjectMember.findById(id);
+    if (!member) {
+      return res.status(404).json(new ApiResponse(404, { message: 'member not found' }));
+    }
+
+    const updatedmember = await ProjectMember.findByIdAndUpdate(id, { role }, { new: true });
+
+    if (!updatedmember) {
+      return res.status(404).json(new ApiResponse(404, { message: 'Project not found' }));
+    }
+
+
+    return res.status(200).json(new ApiResponse(200, { message: 'member is updated' }));
+  }
+
+
+  catch (error) {
+    console.error("Error adding member:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+
+
+
 };
 
 export {
