@@ -6,6 +6,12 @@ const isLoggedIn = async (req, res, next) => {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
 
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+    };
+
     if (!accessToken) {
       if (!refreshToken) {
         return res.status(401).json({
@@ -16,9 +22,15 @@ const isLoggedIn = async (req, res, next) => {
 
       // ✅ VERIFY REFRESH TOKEN
       const refreshDecoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-      const user = await User.findOne({ _id: refreshDecoded._id });
+     const user = await User.findOne({ _id: refreshDecoded._id });
 
-      if (!user) {
+
+
+      console.log("Refresh Token from cookie:", refreshToken);
+console.log("User refresh token from DB:", user ? user.refreshToken : null);
+console.log("User from DB:", user);
+
+      if (!user || user.refreshToken !== refreshToken) {
         return res.status(401).json({
           status: false,
           message: "Unauthorized access",
@@ -36,20 +48,19 @@ const isLoggedIn = async (req, res, next) => {
       user.refreshToken = newRefreshToken;
       await user.save();
 
-      const cookieOptions = {
-        httpOnly: true,
-      };
-
-      res.cookie("accessToken", newAccessToken, cookieOptions); // ✅ fixed typo from aceessToken
+      res.cookie("accessToken", newAccessToken, cookieOptions);
       res.cookie("refreshToken", newRefreshToken, cookieOptions);
-     req.user = user; // ✅ FIXED HERE
-      next();
+
+      req.user = user;
+      return next();
     } else {
       // ✅ VERIFY ACCESS TOKEN
       const accessDecoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
-      const user = await User.findOne({ _id: accessDecoded.id });
+      console.log("Decoded access token:", accessDecoded);
+      const user = await User.findOne({ _id: accessDecoded.id }); // ✅ FIXED HERE
 
       if (!user) {
+
         return res.status(401).json({
           status: false,
           message: "Unauthorized access aa gya sier",
@@ -67,14 +78,11 @@ const isLoggedIn = async (req, res, next) => {
       user.refreshToken = newRefreshToken;
       await user.save();
 
-      const cookieOptions = {
-        httpOnly: true,
-      };
-
-      res.cookie("accessToken", newAccessToken, cookieOptions); // ✅ fixed typo
+      res.cookie("accessToken", newAccessToken, cookieOptions);
       res.cookie("refreshToken", newRefreshToken, cookieOptions);
-      req.user = user; // ✅ FIXED HERE
-      next();
+
+      req.user = user;
+      return next();
     }
   } catch (error) {
     console.error("Error verifying token:", error);

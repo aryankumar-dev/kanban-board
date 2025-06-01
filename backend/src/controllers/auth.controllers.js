@@ -53,40 +53,43 @@ const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    return res.status(400).json(new ApiError(400, {
-      message: "User does not exist",
-      failed: true
-    }));
+     return res.status(400).json(
+      new ApiError(400, "User does not exist", [{ failed: true }])
+    );
+  
   }
+
+   const isPasswordMatch = await user.isPasswordCorrect(password);
+  if (!isPasswordMatch) {
+    return res.status(400).json(
+      new ApiError(400, "Pawwword not Matched", [{ failed: true }])
+    );
+  }
+
+
 
   if (!user.isEmailVerified) {
-    return res.status(400).json(new ApiError(400, {
-      message: "Email not verified",
-      failed: true
-    }));
+
+    return res.status(400).json(
+      new ApiError(400, "Email not verified", [{ failed: true }])
+    );
+
   }
 
-  const isPasswordMatch = await user.isPasswordCorrect(password);
-  if (!isPasswordMatch) {
-    return res.status(400).json(new ApiError(400, {
-      message: "Password not matched",
-      failed: true
-    }));
-  }
-
+ 
   const accessToken = user.generateAccessToken();
   const refreshToken = user.generateRefreshToken();
 
   user.refreshToken = refreshToken;
   await user.save();
 
-    const cookieOptions = {
-      httpOnly: true,
-    };
+  const cookieOptions = {
+    httpOnly: true,
+  };
 
-    // res.cookie("jwtToken", jwtToken, cookieOptions);
-    res.cookie("aceessToken", accessToken, cookieOptions);
-    res.cookie("refreshToken", refreshToken, cookieOptions);
+  // res.cookie("jwtToken", jwtToken, cookieOptions);
+  res.cookie("aceessToken", accessToken, cookieOptions);
+  res.cookie("refreshToken", refreshToken, cookieOptions);
 
   return res.status(200).json(new ApiResponse(200, {
     message: "Login successful.",
@@ -146,12 +149,12 @@ const verifyEmail = asyncHandler(async (req, res) => {
 const resendEmailVerification = asyncHandler(async (req, res) => {
   const { email, username, password, role } = req.body;
 
-  //validation
+
 });
 const resetForgottenPassword = asyncHandler(async (req, res) => {
   const { email, username, password, role } = req.body;
 
-  //validation
+
 });
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
@@ -173,10 +176,47 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 });
 
 const getCurrentUser = asyncHandler(async (req, res) => {
-  const { email, username, password, role } = req.body;
+  const userId = req.user?._id;
+  if (userId) {
+    await User.findByIdAndUpdate(userId, { refreshToken: null });
+  }
 
-  //validation
+  const userdata = await User.findById(userId);
+  return res.status(200).json({
+    status: true,
+    message: "User is ", userdata
+  });
+
 });
+
+
+
+const getCurrentUserbyid = asyncHandler(async (req, res) => {
+  const userId = req.params.userId;
+
+  if (!userId) {
+    return res.status(400).json({
+      status: false,
+      message: "User ID is required"
+    });
+  }
+
+  const userdata = await User.findById(userId).select('-password');
+
+  if (!userdata) {
+    return res.status(404).json({
+      status: false,
+      message: "User not found"
+    });
+  }
+
+  return res.status(200).json({
+    status: true,
+    message: "User found",
+    userdata
+  });
+});
+
 
 export {
   changeCurrentPassword,
@@ -189,4 +229,5 @@ export {
   resendEmailVerification,
   resetForgottenPassword,
   verifyEmail,
+  getCurrentUserbyid,
 };

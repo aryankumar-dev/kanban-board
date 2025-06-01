@@ -1,0 +1,14 @@
+.home-layout {
+  display: flex;
+  width: 100%;
+}
+
+.sidebar {
+  width: 200px;
+  flex-shrink: 0;
+}
+
+.home-content {
+  flex: 1;
+  padding: 20px;
+}

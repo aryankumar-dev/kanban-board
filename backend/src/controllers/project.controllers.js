@@ -66,6 +66,14 @@ const createProject = async (req, res) => {
     });
 
 
+
+    const newMember = await ProjectMember.create({
+      user: createdBy,
+      project: newProject._id,
+      role: "admin",
+    });
+
+    await newMember.save();
     return res.status(201).json(new ApiResponse(401, { message: "Project created successfully" }));
 
 
@@ -147,6 +155,36 @@ const getProjectMembers = async (req, res) => {
     }));
   }
 };
+
+
+const getProjectMembersbyuserid = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Adjust 'userId' to match your actual foreign key field in the Project model
+    const projects = await ProjectMember.find({ user: id });
+
+
+
+    if (!projects || projects.length === 0) {
+      return res.status(404).json(
+        new ApiResponse(404, { message: 'No projects found for this user.' })
+      );
+    }
+
+    res.status(200).json({
+      success: true,
+      data: projects,
+    });
+
+  } catch (error) {
+    console.error('Error fetching projects:', error);
+    return res.status(500).json(new ApiResponse(500, {
+      message: 'Internal server error',
+    }));
+  }
+};
+
 
 const addMemberToProject = async (req, res) => {
   try {
@@ -239,4 +277,5 @@ export {
   getProjects,
   updateMemberRole,
   updateProject,
+  getProjectMembersbyuserid,
 };

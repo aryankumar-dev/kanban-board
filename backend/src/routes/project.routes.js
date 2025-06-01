@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createProject, updateProject, getProjectById, deleteProject ,addMemberToProject,deleteMember , updateMemberRole,getProjects,getProjectMembers} from "../controllers/project.controllers.js";
+import { createProject, updateProject, getProjectById, deleteProject, addMemberToProject, deleteMember, getProjectMembersbyuserid, updateMemberRole, getProjects, getProjectMembers } from "../controllers/project.controllers.js";
 import isLoggedIn from "../middlewares/checkuser.middleware.js";
 const router = Router();
 
@@ -26,12 +26,16 @@ router.route('/addMemberToProject/:projectId')
 router.route('/deleteMember/:id')
   .delete(deleteMember);
 
-  router.route('/projects')
-  .get(isLoggedIn,getProjects);
+router.route('/projects')
+  .get(isLoggedIn, getProjects);
 
-   router.route('/getProjectMembers/:id')
-  .get(isLoggedIn,getProjectMembers);
+router.route('/getProjectMembers/:id')
+  .get(isLoggedIn, getProjectMembers);
 
+
+router.route('/getProjectMembersbyuserid/:id')
+    .get(isLoggedIn, getProjectMembersbyuserid
+    );
 
 router.route('/updateMemberRole/:id')
   .post(updateMemberRole);
