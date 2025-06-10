@@ -1,65 +1,63 @@
-
-
 import React, { useEffect, useState } from 'react';
 import Nav from './Nav';
 import Sidebar from './Sidebar';
-import MyTable from './MyDataTable';
-import './Home.css';
-import Modal from './Modal'; // Import your modal
-
 function Home() {
   const [user, setUser] = useState(null);
   const [error, setError] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetch('http://localhost:3000/api/v1/auth/getCurrentUser', {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // Required for cookies/session-based auth
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log('API response:', data); // Optional: see what you got
         if (data && data.userdata) {
           setUser(data.userdata);
         } else {
           setError('Unable to fetch user data.');
         }
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error(err);
         setError('An error occurred while fetching user data.');
       });
   }, []);
 
-  const handleSuccess = () => {
-    // You can trigger refresh logic here if needed
-    alert('Project created!');
-  };
-
   return (
 
-
-    
     <div>
       <Nav />
       <div className="home-layout">
         <Sidebar />
         <div className="home-content">
-          <h1>Welcome to the Kanban Board</h1>
-          <button onClick={() => setIsModalOpen(true)}>Create New Project</button>
-          {error && <p style={{ color: 'red' }}>{error}</p>}
-          <Modal
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            onSuccess={handleSuccess}
-          />
-          <div className="table-container">
-            <MyTable />
+          <div>
+
+            <h1>Welcome to the Kanban Board</h1>
+          
+
+            {user ? (
+              <div>
+                <p><strong>Email:</strong> {user.email}</p>
+                <p><strong>Name:</strong> {/* You don’t have a `name` field, fallback to username */}</p>
+                <p><strong>Username:</strong> {user.username}</p>
+              </div>
+            ) : (
+              <p>{error || 'Loading user data...'}</p>
+            )}
           </div>
         </div>
       </div>
     </div>
+
+
   );
 }
 
 export default Home;
+
+

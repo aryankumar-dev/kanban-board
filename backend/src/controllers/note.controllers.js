@@ -13,7 +13,7 @@ const getNotes = asyncHandler(async (req, res) => {
 
   const notes = await ProjectNote.find();
 
-   return res.status(400).json(new ApiResponse(400, { message: "Notes are fetched ", notes}));
+  return res.status(200).json(new ApiResponse(200, { message: "Notes are fetched ", notes }));
 
   // find all notes in this porohject and return 
 
@@ -34,9 +34,11 @@ const getNoteById = asyncHandler(async (req, res) => {
 
 const createNote = asyncHandler(async (req, res) => {
   const { projectid } = req.params;
+ 
   const projectexits = await Project.findById(projectid);
-
+     
   if (!projectexits) {
+
     return res.status(400).json(new ApiResponse(400, { message: "project not exists" }));
   }
 
@@ -45,9 +47,10 @@ const createNote = asyncHandler(async (req, res) => {
   const { content } = req.body;
 
   if ((!userId) || (!content)) {
+   
     return res.status(400).json(new ApiResponse(400, { message: "user or content missing " }));
   }
-
+   
   const creatednote = await ProjectNote.create({
     project: projectid,
     createdBy: userId,

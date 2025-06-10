@@ -32,6 +32,7 @@ const getTaskById = asyncHandler(async (req, res) => {
 
 // create task
 const createTask = asyncHandler(async (req, res) => {
+  console.log("task controller");
   const { projectid } = req.params;
   const projectexits = await Project.findById(projectid);
 
@@ -40,22 +41,21 @@ const createTask = asyncHandler(async (req, res) => {
   }
 
   const userId = projectexits.createdBy;
-  const { title, description, assignedTo, status, attachments } = req.body;
-  const isuservalid = await ProjectMember.findById(assignedTo);
+  const { title, status } = req.body;
 
-  if (!title || !description || !status || isuservalid) {
+
+  if (!title  || !status) {
     return res.status(400).json(new ApiResponse(400, { message: "Missing required fields" }));
   }
 
 
   const creatednote = await Task.create({
     title,
-    description,
+    
     project: projectid,
-    assignedTo,
+   
     assignedBy: userId,
-    status,
-    attachments
+    status
   });
 
 

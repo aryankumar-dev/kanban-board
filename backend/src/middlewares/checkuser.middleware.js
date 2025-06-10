@@ -6,6 +6,9 @@ const isLoggedIn = async (req, res, next) => {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
 
+   console.log(`accessToken = ${accessToken}, refreshToken = ${refreshToken}`);
+
+
     const cookieOptions = {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -13,7 +16,10 @@ const isLoggedIn = async (req, res, next) => {
     };
 
     if (!accessToken) {
+        console.log("if");
       if (!refreshToken) {
+
+      
         return res.status(401).json({
           status: false,
           message: "Unauthorized access hai bahi",
@@ -22,13 +28,13 @@ const isLoggedIn = async (req, res, next) => {
 
       // ✅ VERIFY REFRESH TOKEN
       const refreshDecoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-     const user = await User.findOne({ _id: refreshDecoded._id });
+      const user = await User.findOne({ _id: refreshDecoded._id });
 
 
 
       console.log("Refresh Token from cookie:", refreshToken);
-console.log("User refresh token from DB:", user ? user.refreshToken : null);
-console.log("User from DB:", user);
+      console.log("User refresh token from DB:", user ? user.refreshToken : null);
+      console.log("User from DB:", user);
 
       if (!user || user.refreshToken !== refreshToken) {
         return res.status(401).json({
@@ -54,6 +60,7 @@ console.log("User from DB:", user);
       req.user = user;
       return next();
     } else {
+      console.log("else");
       // ✅ VERIFY ACCESS TOKEN
       const accessDecoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
       console.log("Decoded access token:", accessDecoded);

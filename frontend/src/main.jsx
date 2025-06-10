@@ -23,7 +23,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/home" element={<Home />} />
         <Route path="/nav" element={<Nav />} />
         <Route path="/sidebar" element={<Sidebar />} />
-        <Route path="/singleproject/:id" element={<Singleproject />} />
+        <Route path="/singleproject/:projectId" element={<Singleproject />} />
       
 
 

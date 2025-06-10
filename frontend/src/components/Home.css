@@ -1,6 +1,8 @@
 .home-layout {
   display: flex;
+  flex-direction: row;
   width: 100%;
+  height: auto;
 }
 
 .sidebar {
@@ -9,6 +11,7 @@
 }
 
 .home-content {
+  width: 1100px;
   flex: 1;
   padding: 20px;
 }
