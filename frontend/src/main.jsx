@@ -9,6 +9,7 @@ import Registration from './components/Registration.jsx';
 import Nav from './components/Nav.jsx';
 import Sidebar from './components/Sidebar.jsx';
 import Singleproject from './components/Singleproject.jsx';
+import Accountsetting from './components/Accountsetting.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 createRoot(document.getElementById('root')).render(
@@ -24,10 +25,11 @@ createRoot(document.getElementById('root')).render(
         <Route path="/nav" element={<Nav />} />
         <Route path="/sidebar" element={<Sidebar />} />
         <Route path="/singleproject/:projectId" element={<Singleproject />} />
-      
+        <Route path="/accountsetting" element={<Accountsetting />} />
 
 
-</Routes>
+
+      </Routes>
     </BrowserRouter>
   </StrictMode>
 
