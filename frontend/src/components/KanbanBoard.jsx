@@ -54,7 +54,7 @@ const KanbanBoard = () => {
 
     try {
       const res = await fetch(`http://localhost:3000/api/v1/task/createTask/${projectId}`, {
-        method: 'POST',
+        method: 'POST' ,
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({ title, status: column })

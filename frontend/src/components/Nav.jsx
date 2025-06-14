@@ -5,6 +5,25 @@ function Nav() {
   const [user, setUser] = useState(null);
   const [error, setError] = useState('');
 
+  const handleLogout = async () => {
+    try {
+      const res = await fetch('http://localhost:3000/api/v1/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
+      if (res.ok) {
+        setUser(null);
+        window.location.href = '/login'; // or your login route
+      } else {
+        setError('Logout failed.');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('An error occurred while logging out.');
+    }
+  };
+
+
   useEffect(() => {
     fetch('http://localhost:3000/api/v1/auth/getCurrentUser', {
       method: 'GET',
@@ -47,10 +66,10 @@ function Nav() {
 
       <div className="collapse navbar-collapse" id="navbarText">
         <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-4">
-          <li className="nav-item active">
-            <a className="nav-link" href="#">
-              Dropdown <span className="visually-hidden">(current)</span>
-            </a>
+          <li className="nav-item">
+            <button className="nav-link btn btn-link" onClick={handleLogout}>
+              Logout
+            </button>
           </li>
           <li className="nav-item">
             <a className="nav-link" href="#">
