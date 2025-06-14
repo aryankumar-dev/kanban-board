@@ -13,7 +13,7 @@ function Nav() {
       });
       if (res.ok) {
         setUser(null);
-        window.location.href = '/login'; // or your login route
+        window.location.href = '/login';
       } else {
         setError('Logout failed.');
       }
@@ -22,8 +22,6 @@ function Nav() {
       setError('An error occurred while logging out.');
     }
   };
-
-
   useEffect(() => {
     fetch('http://localhost:3000/api/v1/auth/getCurrentUser', {
       method: 'GET',
