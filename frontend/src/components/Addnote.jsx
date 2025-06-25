@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Notes.css';
-import { connect } from 'mongoose';
+
 
 
 function Addnote({ isOpen, onClose, onSuccess,projectId }) {
