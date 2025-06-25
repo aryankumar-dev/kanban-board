@@ -7,7 +7,7 @@ function Nav() {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch('http://localhost:3000/api/v1/auth/logout', {
+      const res = await fetch('https://kanban-board-0e5k.onrender.com/api/v1/auth/logout', {
         method: 'POST',
         credentials: 'include',
       });
@@ -23,7 +23,7 @@ function Nav() {
     }
   };
   useEffect(() => {
-    fetch('http://localhost:3000/api/v1/auth/getCurrentUser', {
+    fetch('https://kanban-board-0e5k.onrender.com/api/v1/auth/getCurrentUser', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

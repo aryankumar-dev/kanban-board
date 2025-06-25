@@ -47,7 +47,7 @@ function MyTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userRes = await fetch('http://localhost:3000/api/v1/auth/getCurrentUser', {
+        const userRes = await fetch('https://kanban-board-0e5k.onrender.com/api/v1/auth/getCurrentUser', {
           method: 'GET',
           credentials: 'include',
         });
@@ -56,7 +56,7 @@ function MyTable() {
         if (userData.status && userData.userdata && userData.userdata._id) {
           const userId = userData.userdata._id;
 
-          const projectRes = await fetch(`http://localhost:3000/api/v1/product/getProjectMembersbyuserid/${userId}`, {
+          const projectRes = await fetch(`https://kanban-board-0e5k.onrender.com/api/v1/product/getProjectMembersbyuserid/${userId}`, {
             method: 'GET',
             credentials: 'include',
           });
@@ -65,10 +65,10 @@ function MyTable() {
           if (projectMembersData.success && Array.isArray(projectMembersData.data)) {
             const membersWithNames = await Promise.all(
               projectMembersData.data.map(async (member) => {
-                const userDetailRes = await fetch(`http://localhost:3000/api/v1/auth/getCurrentUserbyid/${member.user}`);
+                const userDetailRes = await fetch(`https://kanban-board-0e5k.onrender.com/api/v1/auth/getCurrentUserbyid/${member.user}`);
                 const userDetailData = await userDetailRes.json();
 
-                const projectDetailRes = await fetch(`http://localhost:3000/api/v1/product/getProjectById/${member.project}`);
+                const projectDetailRes = await fetch(`https://kanban-board-0e5k.onrender.com/api/v1/product/getProjectById/${member.project}`);
                 const projectDetailData = await projectDetailRes.json();
 
                 return {

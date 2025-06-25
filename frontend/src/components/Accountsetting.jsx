@@ -9,7 +9,7 @@ const Accountsetting = () => {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        fetch('http://localhost:3000/api/v1/auth/getCurrentUser', {
+        fetch('https://kanban-board-0e5k.onrender.com/api/v1/auth/getCurrentUser', {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',

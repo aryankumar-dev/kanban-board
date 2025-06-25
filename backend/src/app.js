@@ -6,7 +6,7 @@ const app = express();
 
 // ✅ Full CORS configuration
 app.use(cors({
-  origin: "http://localhost:5173", // Replace with your React app's URL
+  origin: "https://kanban-board-eight-mu.vercel.app", // Replace with your React app's URL
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // Allowed methods
   allowedHeaders: ["Content-Type", "Authorization"], // Allowed request headers
