@@ -36,10 +36,6 @@ const registerUser = asyncHandler(async (req, res) => {
     mailgenContent: emailVerificationMailgenContent(user.username, verificationUrl),
   });
 
-
-
-  // Handle email send failure
-
   // Respond with success
   res.status(201).json(new ApiResponse(201, {
     message: "User created successfully. Verification email sent.",
