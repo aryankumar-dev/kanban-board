@@ -6,7 +6,7 @@ const Registration = () => {
 
   const [formData, setFormData] = useState({
     email: '',
-    name: '',
+    fullName: '',
     username: '',
     password: '',
   });
@@ -43,7 +43,7 @@ const Registration = () => {
 
         setFormData({
           email: '',
-          name: '',
+          fullName: '',
           username: '',
           password: '',
         });
@@ -76,9 +76,9 @@ const Registration = () => {
         <label>Name</label>
         <input
           type="text"
-          name="name"
+          name="fullName"
           placeholder="Enter your full name"
-          value={formData.name}
+          value={formData.fullName}
           onChange={handleChange}
           required
         />
