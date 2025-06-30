@@ -58,7 +58,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const isPasswordMatch = await user.isPasswordCorrect(password);
   if (!isPasswordMatch) {
     return res.status(400).json(
-      new ApiError(400, "Password not matched", [{ failed: true }])
+      new ApiError(400, "Password not   matched", [{ failed: true }])
     );
   }
 
