@@ -6,20 +6,20 @@ const isLoggedIn = async (req, res, next) => {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
 
-   console.log(`accessToken = ${accessToken}, refreshToken = ${refreshToken}`);
+    console.log(`accessToken = ${accessToken}, refreshToken = ${refreshToken}`);
 
-const cookieOptions = {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",  // Correct environment check
-  sameSite: "None",
-};
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",  // Correct environment check
+      sameSite: "None",
+    };
 
 
     if (!accessToken) {
-        console.log("if");
+      console.log("if");
       if (!refreshToken) {
 
-      
+
         return res.status(401).json({
           status: false,
           message: "Unauthorized access hai bahi",

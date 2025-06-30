@@ -50,45 +50,38 @@ const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-     return res.status(400).json(
+    return res.status(400).json(
       new ApiError(400, "User does not exist", [{ failed: true }])
     );
-  
   }
 
-   const isPasswordMatch = await user.isPasswordCorrect(password);
+  const isPasswordMatch = await user.isPasswordCorrect(password);
   if (!isPasswordMatch) {
     return res.status(400).json(
-      new ApiError(400, "Pawwword not Matched", [{ failed: true }])
+      new ApiError(400, "Password not matched", [{ failed: true }])
     );
   }
 
-
-
   if (!user.isEmailVerified) {
-
     return res.status(400).json(
       new ApiError(400, "Email not verified", [{ failed: true }])
     );
-
   }
 
- 
   const accessToken = user.generateAccessToken();
   const refreshToken = user.generateRefreshToken();
 
   user.refreshToken = refreshToken;
   await user.save();
 
-const cookieOptions = {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",  // Correct environment check
-  sameSite: "None",
-};
+  const cookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",  // Correct environment check
+    sameSite: "None",
+  };
 
-
-  // res.cookie("jwtToken", jwtToken, cookieOptions);
-  res.cookie("aceessToken", accessToken, cookieOptions);
+  // ✅ Fixed typo: "aceessToken" → "accessToken"
+  res.cookie("accessToken", accessToken, cookieOptions);
   res.cookie("refreshToken", refreshToken, cookieOptions);
 
   return res.status(200).json(new ApiResponse(200, {
