@@ -66,6 +66,7 @@ const KanbanBoard = () => {
         [column]: [...prev[column], { ...task, id: task._id }]
       }));
       setNewTasks({ ...newTasks, [column]: '' });
+       fetchAllTasks();
     } catch (err) {
       console.error("Add task failed", err);
     }

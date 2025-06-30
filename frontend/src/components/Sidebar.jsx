@@ -42,7 +42,7 @@ function Sidebar() {
         Account Setting
       </a>
       <a onClick={() => setIsModalOpen(true)}>Add Project</a>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+     
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

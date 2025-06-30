@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { useNavigate } from 'react-router-dom';
 
-function MyTable() {
+function MyTable({refresh}) {
   const [projectMembers, setProjectMembers] = useState([]);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -37,11 +37,31 @@ function MyTable() {
         >
           View More
         </button>
+
+
       ),
+
+
       ignoreRowClick: true,
       allowOverflow: true,
       button: true,
     },
+     {
+    name: 'Delete',
+    cell: row => (
+      <button
+       onClick={() => handleDelete(row.project)}
+
+        className="btn btn-sm btn-danger"
+      >
+        Delete
+      </button>
+    ),
+    ignoreRowClick: true,
+    allowOverflow: true,
+    button: true,
+  },
+
   ];
 
   useEffect(() => {
@@ -93,9 +113,30 @@ function MyTable() {
     };
 
     fetchData();
-  }, []);
+  }, [refresh]);
+
+
+  const handleDelete = async (projectId) => {
+  try {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/product/deleteProject/${projectId}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+    const data = await res.json();
+    if (data.success) {
+      setProjectMembers(prev => prev.filter(member => member.project !== projectId));
+    } else {
+      alert('Failed to delete project');
+    }
+  } catch (error) {
+    console.error(error);
+    alert('An error occurred while deleting the project.');
+  }
+};
+
 
   if (error) return <div style={{ color: 'red' }}>{error}</div>;
+
 
   return (
     <DataTable

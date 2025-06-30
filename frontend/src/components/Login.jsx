@@ -7,9 +7,12 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  setLoading(true);
+  setError('');
 
     try {
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/loginUser`, {
@@ -32,6 +35,9 @@ const Login = () => {
       setError('An error occurred. Please try again.');
       console.error(err);
     }
+    finally {
+    setLoading(false);
+  }
   };
 
   const handleForgotPassword = () => {
@@ -67,12 +73,16 @@ const Login = () => {
 
         {error && <p className="error-message">{error}</p>}
 
-        <button type="submit">Login</button>
+           <button type="submit" disabled={loading}>
+  {loading ? <div className="spinner"></div> : 'Login'}
+</button>
 
         <p className="forgot-password" onClick={handleForgotPassword}>
           Forgot Password?
         </p>
       </form>
+  
+
     </div>
   );
 };

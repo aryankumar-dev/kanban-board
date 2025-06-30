@@ -65,27 +65,23 @@ function Nav() {
       <div className="collapse navbar-collapse" id="navbarText">
         <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-4">
           <li className="nav-item">
-            <button className="nav-link btn btn-link" onClick={handleLogout}>
+            <button className="nav-link btn btn-link text-danger fw-bolder" onClick={handleLogout}>
               Logout
             </button>
           </li>
           <li className="nav-item">
             <a className="nav-link" href="#">
-              Logo
+              📁
             </a>
           </li>
           <li className="nav-item">
             {/* Safely show username or fallback text */}
-            <a className="nav-link" href="#">
+            <a className="nav-link text-secondary fw-bolder" href="#">
               {user?.fullName || 'Loading...'}
             </a>
           </li>
         </ul>
-        {error && (
-          <div className="text-danger ms-auto me-5">
-            {error}
-          </div>
-        )}
+       
       </div>
     </nav>
   );

@@ -117,6 +117,9 @@ const deleteProject = async (req, res) => {
       return res.status(404).json(new ApiResponse(404, { message: 'Project not found' }));
     }
 
+     await ProjectMember.deleteMany({ project: id });
+
+
     await Project.findByIdAndDelete(id);
 
     return res.status(200).json(new ApiResponse(200, { message: 'Project is deleted', data: product }));

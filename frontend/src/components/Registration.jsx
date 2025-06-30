@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Registration.css';
-import { useNavigate } from 'react-router-dom';
+
 
 const Registration = () => {
   const [formData, setFormData] = useState({
@@ -9,10 +9,11 @@ const Registration = () => {
     username: '',
     password: '',
   });
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [emailCheck, setEmailCheck] = useState(false);
-  const navigate = useNavigate();
+
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -21,11 +22,11 @@ const Registration = () => {
     }));
   };
 
-  
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     try {
       const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/register`, {
         method: 'POST',
@@ -38,7 +39,7 @@ const Registration = () => {
       const data = await res.json();
 
       if (res.ok) {
-        setMessage('Check your email for verification and then login');
+        setMessage('Account Created , Check your email for verification and then login');
         setError('');
         setEmailCheck(true);
         setFormData({
@@ -47,7 +48,7 @@ const Registration = () => {
           username: '',
           password: '',
         });
-        navigate('/login');
+
       } else {
         setError(data.message || 'Registration failed.');
         setMessage('');
@@ -55,6 +56,8 @@ const Registration = () => {
     } catch (err) {
       console.error(err);
       setError('Something went wrong.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -114,7 +117,12 @@ const Registration = () => {
         {error && <p className="error-message">{error}</p>}
         {message && <p className="success-message">{message}</p>}
 
-        <button type="submit">Register</button>
+
+
+        <button type="submit" disabled={loading}>
+          {loading ? <div className="spinner"></div> : 'Register'}
+        </button>
+
       </form>
     </div>
   );

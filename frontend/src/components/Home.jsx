@@ -12,34 +12,49 @@ function Home() {
   const [error, setError] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [refresh, setRefresh] = useState(false);
+
+
+
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/getCurrentUser`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.userdata) {
-          setUser(data.userdata);
-        } else {
-          setError('Unable to fetch user data.');
-        }
+    const fetchUser = (retry = false) => {
+      fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/getCurrentUser`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
       })
-      .catch(() => {
-        setError('An error occurred while fetching user data.');
-      });
+        .then((res) => res.json())
+        .then((data) => {
+          if (data && data.userdata) {
+            setUser(data.userdata);
+            setError('');
+          } else if (!retry) {
+            setTimeout(() => fetchUser(true), 500); // Retry after 500ms
+          } else {
+            setError('Unable to fetch user data.');
+          }
+        })
+        .catch(() => {
+          if (!retry) {
+            setTimeout(() => fetchUser(true), 500);
+          } else {
+            setError('An error occurred while fetching user data.');
+          }
+        });
+    };
+
+    fetchUser();
   }, []);
 
-  const handleSuccess = () => {
-    // You can trigger refresh logic here if needed
-    alert('Project created!');
-  };
 
+ 
+const handleSuccess = () => {
+  setRefresh(prev => !prev);  // Toggle the refresh state to trigger useEffect in MyTable
+};
   return (
 
 
-    
+
     <div>
       <Nav />
       <div className="home-layout">
@@ -54,7 +69,8 @@ function Home() {
             onSuccess={handleSuccess}
           />
           <div className="table-container">
-            <MyTable />
+         <MyTable refresh={refresh} />
+
           </div>
         </div>
       </div>

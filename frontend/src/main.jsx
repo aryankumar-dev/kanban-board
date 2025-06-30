@@ -12,6 +12,7 @@ import Singleproject from './components/Singleproject.jsx';
 import Accountsetting from './components/Accountsetting.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import VerifyEmail from './components/VerifyEmail.jsx'
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 createRoot(document.getElementById('root')).render(
 
@@ -22,11 +23,49 @@ createRoot(document.getElementById('root')).render(
         <Route path="/login" element={<Login />} />
         <Route path="/verifyEmail/:token" element={<VerifyEmail />} />
         <Route path="/" element={<Registration />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/nav" element={<Nav />} />
-        <Route path="/sidebar" element={<Sidebar />} />
-        <Route path="/singleproject/:projectId" element={<Singleproject />} />
-        <Route path="/accountsetting" element={<Accountsetting />} />
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/nav"
+          element={
+            <ProtectedRoute>
+              <Nav />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/sidebar"
+          element={
+            <ProtectedRoute>
+              <Sidebar />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/singleproject/:projectId"
+          element={
+            <ProtectedRoute>
+              <Singleproject />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/accountsetting"
+          element={
+            <ProtectedRoute>
+              <Accountsetting />
+            </ProtectedRoute>
+          }
+        />
 
 
 
