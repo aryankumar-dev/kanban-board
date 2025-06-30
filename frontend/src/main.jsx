@@ -26,9 +26,9 @@ createRoot(document.getElementById('root')).render(
         <Route
           path="/home"
           element={
-            <ProtectedRoute>
+           
               <Home />
-            </ProtectedRoute>
+           
           }
         />
         <Route
