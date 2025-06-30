@@ -8,13 +8,12 @@ const isLoggedIn = async (req, res, next) => {
 
    console.log(`accessToken = ${accessToken}, refreshToken = ${refreshToken}`);
 
-
-   
- const cookieOptions = {
+const cookieOptions = {
   httpOnly: true,
-  secure: process.env.FRONTEND_BASE_URL === "production",  // Only set secure on live
-  sameSite: "None",  // Required for cross-origin cookies
+  secure: process.env.NODE_ENV === "production",  // Correct environment check
+  sameSite: "None",
 };
+
 
     if (!accessToken) {
         console.log("if");

@@ -80,10 +80,10 @@ const loginUser = asyncHandler(async (req, res) => {
   user.refreshToken = refreshToken;
   await user.save();
 
- const cookieOptions = {
+const cookieOptions = {
   httpOnly: true,
-  secure: process.env.FRONTEND_BASE_URL === "production",  // Only set secure on live
-  sameSite: "None",  // Required for cross-origin cookies
+  secure: process.env.NODE_ENV === "production",  // Correct environment check
+  sameSite: "None",
 };
 
 
