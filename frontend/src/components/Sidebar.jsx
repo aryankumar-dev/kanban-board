@@ -9,7 +9,7 @@ function Sidebar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
-    fetch('https://kanban-board-0e5k.onrender.com/api/v1/auth/getCurrentUser', {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/getCurrentUser`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -34,7 +34,7 @@ function Sidebar() {
 
   return (
     <div className="sidebar">
-      <a className="active" href="#home">Project</a>
+      <a  onClick={() => navigate(`/home`)} className="active" href="#home">Project</a>
 
       <a
         onClick={() => navigate(`/accountsetting`)}

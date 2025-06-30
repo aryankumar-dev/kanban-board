@@ -32,7 +32,7 @@ const KanbanBoard = () => {
 
   const fetchAllTasks = async () => {
     try {
-      const res = await fetch(`https://kanban-board-0e5k.onrender.com/api/v1/task/getTasks/${projectId}`);
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/task/getTasks/${projectId}`);
       const data = await res.json();
       const allTasks = data.data.alltaskdata || [];
 
@@ -53,7 +53,7 @@ const KanbanBoard = () => {
     if (!title) return;
 
     try {
-      const res = await fetch(`https://kanban-board-0e5k.onrender.com/api/v1/task/createTask/${projectId}`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/task/createTask/${projectId}`, {
         method: 'POST' ,
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -73,7 +73,7 @@ const KanbanBoard = () => {
 
   const handleDeleteTask = async (taskId, column) => {
     try {
-      await fetch(`http://localhost:3000/api/v1/task/deleteTask/${taskId}`, {
+      await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/task/deleteTask/${taskId}`, {
         method: 'DELETE',
         credentials: 'include'
       });
@@ -99,7 +99,7 @@ const KanbanBoard = () => {
     if (sourceColumn === targetColumn) return;
 
     try {
-      await fetch(`https://kanban-board-0e5k.onrender.com/api/v1/task/updateTask/${task._id}`, {
+      await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/task/updateTask/${task._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

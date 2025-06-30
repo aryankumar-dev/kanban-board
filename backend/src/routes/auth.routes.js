@@ -10,9 +10,8 @@ const router = Router();
 router.route("/register")
   .post(userRegisterValidator(), validate, registerUser);
 
-router.route("/verifyemail/:token")
+router.route("/verifyEmail/:token")
   .get(verifyEmail);
-
 
 router.route("/loginUser")
   .post(loginUser);

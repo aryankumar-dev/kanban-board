@@ -17,7 +17,7 @@ function Addnote({ isOpen, onClose, onSuccess,projectId }) {
         setError('');
 
         try {
-            const response = await fetch(`https://kanban-board-0e5k.onrender.com/api/v1/note/createNote/${projectId}`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/note/createNote/${projectId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',

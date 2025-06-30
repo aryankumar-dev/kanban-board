@@ -11,6 +11,7 @@ import Sidebar from './components/Sidebar.jsx';
 import Singleproject from './components/Singleproject.jsx';
 import Accountsetting from './components/Accountsetting.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import VerifyEmail from './components/VerifyEmail.jsx'
 
 createRoot(document.getElementById('root')).render(
 
@@ -19,7 +20,7 @@ createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path="/App" element={<App />} />
         <Route path="/login" element={<Login />} />
-
+        <Route path="/verifyEmail/:token" element={<VerifyEmail />} />
         <Route path="/" element={<Registration />} />
         <Route path="/home" element={<Home />} />
         <Route path="/nav" element={<Nav />} />

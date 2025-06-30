@@ -11,7 +11,8 @@ const registerUser = asyncHandler(async (req, res) => {
   // Check if user already exists
   const userExists = await User.findOne({ email });
   if (userExists) {
-    return res.status(400).json(new ApiResponse(400, { message: "User already exists" }));
+   return res.status(400).json(new ApiResponse(400, null, "User already exists"));
+
   }
 
   // Create new user instance
@@ -27,7 +28,7 @@ const registerUser = asyncHandler(async (req, res) => {
   await user.save();
 
   // Prepare verification email URL
-  const verificationUrl = `${process.env.FRONTEND_BASE_URL}/verifyEmail?token=${unHashedToken}&email=${email}`;
+  const verificationUrl = `${process.env.FRONTEND_BASE_URL}/verifyEmail/${hashedToken}`;
 
   // Send verification email
   await sendEmail({

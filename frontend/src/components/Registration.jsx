@@ -21,11 +21,13 @@ const Registration = () => {
     }));
   };
 
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await fetch('https://kanban-board-0e5k.onrender.com/api/v1/auth/register', {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

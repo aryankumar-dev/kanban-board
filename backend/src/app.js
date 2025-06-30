@@ -1,12 +1,14 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 
 // ✅ Full CORS configuration
 app.use(cors({
-  origin: "https://kanban-board-eight-mu.vercel.app", // Replace with your React app's URL
+  origin: process.env.FRONTEND_BASE_URL, // Replace with your React app's URL
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // Allowed methods
   allowedHeaders: ["Content-Type", "Authorization"], // Allowed request headers

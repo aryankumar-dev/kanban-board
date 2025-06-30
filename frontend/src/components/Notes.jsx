@@ -16,7 +16,7 @@ const Notes = () => {
 
 const fetchNotes = async () => {
   try {
-    const res = await fetch(`https://kanban-board-0e5k.onrender.com/api/v1/note/getNotes/${projectId}`, {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/note/getNotes/${projectId}`, {
       method: 'GET',
       credentials: 'include',
     });
@@ -41,7 +41,7 @@ const fetchNotes = async () => {
 
   const handleDelete = async (noteId) => {
     try {
-      const res = await fetch(`https://kanban-board-0e5k.onrender.com/api/v1/note/deleteNote/${noteId}`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/note/deleteNote/${noteId}`, {
         method: 'DELETE',
         credentials: 'include',
       });
