@@ -10,16 +10,14 @@ const isLoggedIn = async (req, res, next) => {
 
     const cookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",  // Correct environment check
+      secure: process.env.NODE_ENV === "production",
       sameSite: "None",
     };
 
-
     if (!accessToken) {
-      console.log("if");
+      console.log("Access token missing, checking refresh token...");
+
       if (!refreshToken) {
-
-
         return res.status(401).json({
           status: false,
           message: "Unauthorized access hai bahi",
@@ -30,11 +28,8 @@ const isLoggedIn = async (req, res, next) => {
       const refreshDecoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
       const user = await User.findOne({ _id: refreshDecoded._id });
 
-
-
       console.log("Refresh Token from cookie:", refreshToken);
       console.log("User refresh token from DB:", user ? user.refreshToken : null);
-      console.log("User from DB:", user);
 
       if (!user || user.refreshToken !== refreshToken) {
         return res.status(401).json({
@@ -43,11 +38,11 @@ const isLoggedIn = async (req, res, next) => {
         });
       }
 
-      // ✅ GENERATE NEW TOKENS
-      const newAccessToken = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET, {
+      // ✅ GENERATE NEW TOKENS with _id
+      const newAccessToken = jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
       });
-      const newRefreshToken = jwt.sign({ id: user._id }, process.env.REFRESH_TOKEN_SECRET, {
+      const newRefreshToken = jwt.sign({ _id: user._id }, process.env.REFRESH_TOKEN_SECRET, {
         expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
       });
 
@@ -60,24 +55,26 @@ const isLoggedIn = async (req, res, next) => {
       req.user = user;
       return next();
     } else {
-      console.log("else");
+      console.log("Access token present, verifying...");
+
       // ✅ VERIFY ACCESS TOKEN
       const accessDecoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
-      console.log("Decoded access token - :", accessDecoded);
-       const user = await User.findOne({ _id: accessDecoded._id });
-      if (!user) {
+      console.log("Decoded access token:", accessDecoded);
 
+      const user = await User.findOne({ _id: accessDecoded._id });
+
+      if (!user) {
         return res.status(401).json({
           status: false,
           message: "Unauthorized access aa gya sier",
         });
       }
 
-      // ✅ GENERATE NEW TOKENS
-      const newAccessToken = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET, {
+      // ✅ GENERATE NEW TOKENS with _id
+      const newAccessToken = jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
       });
-      const newRefreshToken = jwt.sign({ id: user._id }, process.env.REFRESH_TOKEN_SECRET, {
+      const newRefreshToken = jwt.sign({ _id: user._id }, process.env.REFRESH_TOKEN_SECRET, {
         expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
       });
 
