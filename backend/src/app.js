@@ -8,7 +8,7 @@ const app = express();
 
 // ✅ Full CORS configuration
 app.use(cors({
-  origin: process.env.FRONTEND_BASE_URL, // Replace with your React app's URL
+  origin: process.env.CLIENT_ORIGIN, // Replace with your React app's URL
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // Allowed methods
   allowedHeaders: ["Content-Type", "Authorization"], // Allowed request headers
