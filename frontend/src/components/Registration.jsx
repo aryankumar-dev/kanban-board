@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import './Registration.css';
+import { useNavigate } from 'react-router-dom';
+
+
 
 
 const Registration = () => {
@@ -15,6 +18,7 @@ const Registration = () => {
   const [emailCheck, setEmailCheck] = useState(false);
 
 
+  const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -124,8 +128,17 @@ const Registration = () => {
         </button>
 
       </form>
+
+      <p>
+        Already have an account?
+        <button className="login-btn" onClick={() => navigate('/login')}>
+          Login
+        </button>
+      </p>
+
     </div>
   );
 };
 
 export default Registration;
+

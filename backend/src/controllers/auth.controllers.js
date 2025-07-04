@@ -111,6 +111,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 
 
 const verifyEmail = asyncHandler(async (req, res) => {
+
   const token = req.params.token;
 
   const user = await User.findOne({
