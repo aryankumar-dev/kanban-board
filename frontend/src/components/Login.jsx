@@ -77,9 +77,9 @@ const [loading, setLoading] = useState(false);
   {loading ? <div className="spinner"></div> : 'Login'}
 </button>
 
-        <p className="forgot-password" onClick={handleForgotPassword}>
+        {/* <p className="forgot-password" onClick={handleForgotPassword}>
           Forgot Password?
-        </p>
+        </p> */}
       </form>
   
 
